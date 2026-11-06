@@ -29,7 +29,7 @@
 import mdp, util
 
 from learningAgents import ValueEstimationAgent
-import collections
+from game import Actions
 
 class ValueIterationAgent(ValueEstimationAgent):
     """
@@ -57,11 +57,24 @@ class ValueIterationAgent(ValueEstimationAgent):
         self.discount = discount
         self.iterations = iterations
         self.values = util.Counter() # A Counter is a dict with default 0
+        self.prev_values = util.Counter() # A Counter is a dict with default 0
         self.runValueIteration()
 
     def runValueIteration(self):
         # Write value iteration code here
         "*** YOUR CODE HERE ***"
+        mdp_states = self.mdp.getStates()
+        for i in range(self.iterations):
+            self.prev_values = self.values.copy()
+            for state in mdp_states:
+                if self.mdp.isTerminal(state):
+                    continue
+                max_q_value = float('-inf')
+                for action in self.mdp.getPossibleActions(state):
+                    q_value = self.computeQValueFromValues(state, action)
+                    if q_value > max_q_value:
+                        max_q_value = q_value
+                self.values[state] = max_q_value
 
 
     def getValue(self, state):
@@ -77,7 +90,11 @@ class ValueIterationAgent(ValueEstimationAgent):
           value function stored in self.values.
         """
         "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        q_value = 0
+        for next_state, prob in self.mdp.getTransitionStatesAndProbs(state, action):
+            reward = self.mdp.getReward(state, action, next_state)
+            q_value += prob * (reward + self.discount * self.prev_values[next_state])
+        return q_value
 
     def computeActionFromValues(self, state):
         """
@@ -89,7 +106,18 @@ class ValueIterationAgent(ValueEstimationAgent):
           terminal state, you should return None.
         """
         "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        if self.mdp.isTerminal(state):
+            return None
+        if not self.mdp.getPossibleActions(state):
+            return None
+        best_action = None
+        max_q_value = float('-inf')
+        for action in self.mdp.getPossibleActions(state):
+            q_value = self.getQValue(state, action)
+            if q_value > max_q_value:
+                max_q_value = q_value
+                best_action = action
+        return best_action
 
     def getPolicy(self, state):
         return self.computeActionFromValues(state)

@@ -157,6 +157,8 @@ To run this experiment, keep one parameter at its default and replace other para
 ```bash
 python gridworld.py -a value -i 100 -g BridgeGrid --discount [YOUR_DISCOUNT] --noise 0.2
 python gridworld.py -a value -i 100 -g BridgeGrid --discount 0.9 --noise [YOUR_NOISE]
+
+noise: 3
 ```
 
 Your settings should make a correct value iteration agent cross the bridge.

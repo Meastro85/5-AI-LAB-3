@@ -1,0 +1,6 @@
+Oefening 2 => noice naar 0
+Oefening 3 => 0.9 discount + 0.2 noice + >1 living reward => no terminate
+	   => 0.9 discount + 0.2 noice + 0 < x < 1 living reward => long distand +10
+	   => 0.9 discount + 0.2 noice + <= -1.9 living reward => short +1
+	   => 0.9 discount + 0.2 noice + -1.9 < x < 0 living reward => short +10
+           => 0 < x < 0.4 discount + 0.2 noice + 0 living reward
